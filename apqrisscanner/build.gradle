@@ -33,30 +33,46 @@ android {
     }
 }
 
+
 apply plugin: 'maven-publish'
+// Safely load GitHub credentials
+def githubProperties = new Properties()
+def githubPropertiesFile = rootProject.file('github.properties')
+if (githubPropertiesFile.exists()) {
+    githubProperties.load(new FileInputStream(githubPropertiesFile))
+} else {
+    println 'github.properties file not found. Falling back to environment variables.'
+}
+
+def getVersionName = { ->
+    return "0.0.1" // Replace with version name
+}
+
+def getArtifactId = { ->
+    return "apqrisscanner" // Replace with library name ID
+}
 
 publishing {
     publications {
         bar(MavenPublication) {
-            groupId = 'com.astrapay'
-            artifactId = 'qrisScanner'
-            version = '0.0.1'
-            artifact("$buildDir/outputs/aar/apqrisscanner-debug.aar")
+            groupId = 'com.astrapay' // Replace with group ID
+            artifactId = getArtifactId()
+            version = getVersionName()
+            artifact("$buildDir/outputs/aar/${getArtifactId()}-debug.aar")
         }
     }
 
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ap-rahmanipratama/astrapayqrisproject")
+            url = uri("https://maven.pkg.github.com/ap-rahmanipratama/astrapayqrisproject") // Replace GITHUB_USERID and REPOSITORY
             credentials {
-                username = project.findProperty("gpr.user") ?: System.getenv("GPR_USER")
-                password = project.findProperty("gpr.key") ?: System.getenv("GPR_API_KEY")
+                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
             }
         }
     }
 }
-
 dependencies {
 
     api libs.androidx.core.ktx

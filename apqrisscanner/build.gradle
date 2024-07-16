@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.astrapay.qrissdk'
+    namespace 'com.astrapay.apqrisscanner'
     compileSdk 34
 
     defaultConfig {
@@ -29,6 +29,7 @@ android {
     }
     buildFeatures {
         viewBinding true
+        dataBinding true
     }
 }
 
@@ -36,11 +37,11 @@ apply plugin: 'maven-publish'
 
 publishing {
     publications {
-        aar(MavenPublication) {
+        bar(MavenPublication) {
             groupId = 'com.astrapay'
-            artifactId = 'qrissdk'
-            version = '1.0.3'
-            artifact("$buildDir/outputs/aar/qrissdk-debug.aar")
+            artifactId = 'qrisScanner'
+            version = '0.0.1'
+            artifact("$buildDir/outputs/aar/apqrisscanner-debug.aar")
         }
     }
 
@@ -56,17 +57,24 @@ publishing {
     }
 }
 
-
-
 dependencies {
 
-    implementation libs.androidx.core.ktx
-    implementation libs.androidx.appcompat
-    implementation libs.material
-    implementation libs.androidx.constraintlayout
-    implementation libs.androidx.navigation.fragment.ktx
-    implementation libs.androidx.navigation.ui.ktx
+    api libs.androidx.core.ktx
+    api libs.androidx.appcompat
+    api libs.material
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
+
+    // CameraX dependencies
+    api "androidx.camera:camera-core:1.2.1"
+    api "androidx.camera:camera-camera2:1.2.1"
+    api "androidx.camera:camera-lifecycle:1.2.1"
+    api "androidx.camera:camera-view:1.2.1"
+    api 'com.google.mlkit:barcode-scanning:17.0.0'
+
+    // navigation component
+    ext.nav_version = "2.3.5"
+    api "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    api "androidx.navigation:navigation-ui-ktx:$nav_version"
 }

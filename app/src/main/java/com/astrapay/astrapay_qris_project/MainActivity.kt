@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.astrapay.apqrisscanner.ApQrisScannerActivity
 import com.astrapay.astrapay_qris_project.ui.theme.AstrapayqrisprojectTheme
 import com.astrapay.qrissdk.QrisMainActivity
 
@@ -57,7 +58,16 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
             },
             modifier = Modifier.align(CenterHorizontally) // Optional: center the button
         ) {
-            Text("Click Me")
+            Text("Qris Sdk")
+        }
+        Button(
+            onClick = {
+                val intentQris = Intent(context, ApQrisScannerActivity::class.java)
+                context.startActivity(intentQris)
+            },
+            modifier = Modifier.align(CenterHorizontally) // Optional: center the button
+        ) {
+            Text("Scanner")
         }
     }
 }

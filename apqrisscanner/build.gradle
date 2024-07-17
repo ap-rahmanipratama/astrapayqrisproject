@@ -30,6 +30,7 @@ android {
     buildFeatures {
         viewBinding true
         dataBinding true
+
     }
 }
 
@@ -45,7 +46,7 @@ if (githubPropertiesFile.exists()) {
 }
 
 def getVersionName = { ->
-    return "0.0.1" // Replace with version name
+    return "0.1.0" // Replace with version name
 }
 
 def getArtifactId = { ->
@@ -54,7 +55,7 @@ def getArtifactId = { ->
 
 publishing {
     publications {
-        bar(MavenPublication) {
+        aar(MavenPublication) {
             groupId = 'com.astrapay' // Replace with group ID
             artifactId = getArtifactId()
             version = getVersionName()
@@ -73,6 +74,7 @@ publishing {
         }
     }
 }
+
 dependencies {
 
     api libs.androidx.core.ktx
@@ -83,14 +85,14 @@ dependencies {
     androidTestImplementation libs.androidx.espresso.core
 
     // CameraX dependencies
-    api "androidx.camera:camera-core:1.2.1"
-    api "androidx.camera:camera-camera2:1.2.1"
-    api "androidx.camera:camera-lifecycle:1.2.1"
-    api "androidx.camera:camera-view:1.2.1"
-    api 'com.google.mlkit:barcode-scanning:17.0.0'
+    implementation "androidx.camera:camera-core:1.2.1"
+    implementation "androidx.camera:camera-camera2:1.2.1"
+    implementation "androidx.camera:camera-lifecycle:1.2.1"
+    implementation "androidx.camera:camera-view:1.2.1"
+    implementation 'com.google.mlkit:barcode-scanning:17.0.0'
 
     // navigation component
     ext.nav_version = "2.3.5"
-    api "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    api "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 }

@@ -34,6 +34,15 @@ class ApQrisScannerActivity : AppCompatActivity() {
         ) {
             binding.cameraOverlay.startCamera(this)
         }
+
+        binding.back.setOnClickListener {
+            this.finish()
+            ApQrisScanner.listener?.onComplete(type = EventType.Home)
+        }
+
+        binding.cameraOverlay.onGetQrResult {
+            ApQrisScanner.listener?.onQrisScanned(it)
+        }
     }
 
     fun checkPermission(permission: String, launcher: ActivityResultLauncher<String>): Boolean {

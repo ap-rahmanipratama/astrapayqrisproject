@@ -7,7 +7,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.astrapay.apqrisscanner.databinding.QrisCameraBaseBinding
 import com.astrapay.apqrisscanner.databinding.QrisScannerActivityBinding
 
 class ApQrisScannerActivity : AppCompatActivity() {
@@ -41,6 +40,7 @@ class ApQrisScannerActivity : AppCompatActivity() {
         }
 
         binding.cameraOverlay.onGetQrResult {
+            this.finish()
             ApQrisScanner.listener?.onQrisScanned(it)
         }
     }

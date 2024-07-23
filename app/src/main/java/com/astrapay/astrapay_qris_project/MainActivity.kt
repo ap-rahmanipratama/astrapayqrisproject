@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.astrapay.apqrisscanner.ApQrisScanner
-import com.astrapay.apqrisscanner.ApQrisScannerActivity
 import com.astrapay.apqrisscanner.ApScannerListener
 import com.astrapay.apqrisscanner.ApScannerSetup
 import com.astrapay.apqrisscanner.EventType

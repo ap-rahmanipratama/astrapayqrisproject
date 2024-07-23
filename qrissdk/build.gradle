@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id 'maven-publish'
+
 }
 
 android {
@@ -31,42 +33,40 @@ android {
         viewBinding true
     }
 }
-
-apply plugin: 'maven-publish'
-// Safely load GitHub credentials
-def githubProperties = new Properties()
-def githubPropertiesFile = rootProject.file('github.properties')
-if (githubPropertiesFile.exists()) {
-    githubProperties.load(new FileInputStream(githubPropertiesFile))
-} else {
-    println 'github.properties file not found. Falling back to environment variables.'
-}
-
-def getVersionName = { ->
-    return "1.1.1" // Replace with version name
-}
-
-def getArtifactId = { ->
-    return "qrissdk" // Replace with library name ID
-}
-
-publishing {
-    publications {
-        bar(MavenPublication) {
-            groupId = 'com.astrapay' // Replace with group ID
-            artifactId = getArtifactId()
-            version = getVersionName()
-            artifact("$buildDir/outputs/aar/${getArtifactId()}-debug.aar")
-        }
+tasks.register('androidSourcesJar', Jar) {
+    archiveClassifier.set('sources')
+    if (project.plugins.findPlugin("com.android.library")) {
+        from android.sourceSets.main.java.srcDirs
+    } else {
+        from sourceSets.main.java.srcDirs
     }
+}
 
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ap-rahmanipratama/astrapayqrisproject") // Replace GITHUB_USERID and REPOSITORY
-            credentials {
-                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
-                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+artifacts {
+    archives androidSourcesJar
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            libraryProject(MavenPublication) {
+                setGroupId 'com.astrapay'
+                setArtifactId 'qrissdk'
+                version '1.0.0'
+                artifact androidSourcesJar
+                artifact "$buildDir/outputs/aar/qrissdk-debug.aar"
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    configurations.implementation.allDependencies.each { dep ->
+                        if (dep.group && dep.name && dep.version) {
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', dep.group)
+                            dependencyNode.appendNode('artifactId', dep.name)
+                            dependencyNode.appendNode('version', dep.version)
+                            dependencyNode.appendNode('scope', 'runtime')
+                        }
+                    }
+                }
             }
         }
     }

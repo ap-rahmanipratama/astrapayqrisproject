@@ -49,6 +49,7 @@ if (githubPropertiesFile.exists()) {
 def getVersionName = { -> "0.1.4" } // Replace with version name
 def getArtifactId = { -> "apqrisscanner" } // Replace with library name ID
 
+<<<<<<< Updated upstream
 publishing {
     publications {
         aar(MavenPublication) {
@@ -69,8 +70,40 @@ publishing {
                         dependencyNode.appendNode('artifactId', dep.name)
                         dependencyNode.appendNode('version', dep.version)
                         dependencyNode.appendNode('scope', 'runtime')
+=======
+afterEvaluate {
+    publishing {
+        publications {
+            libraryProject(MavenPublication) {
+                setGroupId 'com.astrapay'
+                setArtifactId 'apqrisscanner'
+                version '0.2.1'
+                artifact androidSourcesJar
+                artifact "$buildDir/outputs/aar/apqrisscanner-debug.aar"
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    configurations.implementation.allDependencies.each { dep ->
+                        if (dep.group && dep.name && dep.version) {
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', dep.group)
+                            dependencyNode.appendNode('artifactId', dep.name)
+                            dependencyNode.appendNode('version', dep.version)
+                            dependencyNode.appendNode('scope', 'runtime')
+                        }
+>>>>>>> Stashed changes
                     }
                 }
+            }
+        }
+        repositories {
+            maven {
+                name = 'localNexus'
+                url "http://localhost:8085/repository/maven-releases/"
+                credentials {
+                    username = 'admin' // Change to your Nexus username
+                    password = '3083fd3b-28ee-4921-a5a0-7faeab9182b4' // Change to your Nexus password
+                }
+                allowInsecureProtocol = true
             }
         }
     }

@@ -69,6 +69,17 @@ publishing {
                 password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
             }
         }
+        repositories {
+            maven {
+                name = 'localNexus'
+                url "http://localhost:8085/repository/maven-releases/"
+                credentials {
+                    username = 'admin' // Change to your Nexus username
+                    password = '3083fd3b-28ee-4921-a5a0-7faeab9182b4' // Change to your Nexus password
+                }
+                allowInsecureProtocol = true
+            }
+        }
     }
 }
 

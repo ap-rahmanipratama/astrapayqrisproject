@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 
-class CameraFocus(context: Context, attributeSet: AttributeSet) :
+internal class CameraFocus(context: Context, attributeSet: AttributeSet) :
     SurfaceView(context, attributeSet) {
 
     val focusRect: RectF = RectF()

@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.astrapay.apqrisscanner.databinding.QrisScannerActivityBinding
 
-class ApQrisScannerActivity : AppCompatActivity() {
+internal class ApQrisScannerActivity : AppCompatActivity() {
 
     private lateinit var binding: QrisScannerActivityBinding
 

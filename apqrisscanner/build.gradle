@@ -17,7 +17,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -46,7 +46,7 @@ if (githubPropertiesFile.exists()) {
     println 'github.properties file not found. Falling back to environment variables.'
 }
 
-def getVersionName = { -> "0.1.4" } // Replace with version name
+def getVersionName = { -> "1.0.0" } // Replace with version name
 def getArtifactId = { -> "apqrisscanner" } // Replace with library name ID
 
 publishing {

@@ -20,7 +20,7 @@ import java.io.IOException
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-public class QrisCameraBase(mContext: Context, attributeSet: AttributeSet) :
+internal class QrisCameraBase(mContext: Context, attributeSet: AttributeSet) :
     FrameLayout(mContext, attributeSet) {
 
     private var binding: QrisCameraBaseBinding

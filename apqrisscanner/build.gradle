@@ -3,6 +3,24 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
 }
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+ext {
+    PUBLISH_GROUP_ID = 'com.astrapay'
+    PUBLISH_VERSION = '0.0.2'
+    PUBLISH_ARTIFACT_ID = 'apqrisscanner'
+    PUBLISH_DESCRIPTION = 'apqrisscanner solutioning'
+    PUBLISH_URL = 'https://github.com/ap-rahmanipratama/astrapayqrisproject'
+    PUBLISH_LICENSE_NAME = 'Apache License'
+    PUBLISH_LICENSE_URL = ''
+    PUBLISH_DEVELOPER_ID = 'astrapay'
+    PUBLISH_DEVELOPER_NAME = 'astrapay'
+    PUBLISH_DEVELOPER_EMAIL = 'rahman.i.pratama@astrapay.com'
+    PUBLISH_DEVELOPER_EMAIL2 = 'gilbert.subay@astrapay.com'
+    PUBLISH_SCM_CONNECTION = 'scm:git:https://github.com/ap-rahmanpratama/astrapayqrisproject.git'
+    PUBLISH_SCM_DEVELOPER_CONNECTION = 'scm:git:ssh://github.com/ap-rahmanpratama/astrapayqrisproject.git'
+    PUBLISH_SCM_URL = 'https://github.com/ap-rahmanpratama/astrapayqrisproject'
+}
 
 android {
     namespace 'com.astrapay.apqrisscanner'
@@ -46,7 +64,7 @@ if (githubPropertiesFile.exists()) {
     println 'github.properties file not found. Falling back to environment variables.'
 }
 
-def getVersionName = { -> "1.0.0" } // Replace with version name
+def getVersionName = { -> "0.0.1-SNAPSHOT" } // Replace with version name
 def getArtifactId = { -> "apqrisscanner" } // Replace with library name ID
 
 publishing {
@@ -57,7 +75,7 @@ publishing {
             version = getVersionName()
 
             // Include the AAR artifact
-            artifact("$buildDir/outputs/aar/${getArtifactId()}-debug.aar")
+            artifact("$buildDir/outputs/aar/${getArtifactId()}-release.aar")
 
             // Include dependencies in the POM file
             pom.withXml {
@@ -72,18 +90,62 @@ publishing {
                     }
                 }
             }
+            pom {
+                name = PUBLISH_ARTIFACT_ID
+                description = PUBLISH_DESCRIPTION
+                url = PUBLISH_URL
+                licenses {
+                    license {
+                        name = PUBLISH_LICENSE_NAME
+                        url = PUBLISH_LICENSE_URL
+                    }
+                }
+                developers {
+                    developer {
+                        id = PUBLISH_DEVELOPER_ID
+                        name = PUBLISH_DEVELOPER_NAME
+                        email = PUBLISH_DEVELOPER_EMAIL
+                    }
+                }
+
+                // Version control info - if you're using GitHub, follow the
+                // format as seen here
+                scm {
+                    connection = PUBLISH_SCM_CONNECTION
+                    developerConnection = PUBLISH_SCM_DEVELOPER_CONNECTION
+                    url = PUBLISH_SCM_URL
+                }
+            }
         }
     }
 
+    ext["signing.keyId"] = rootProject.ext["signing.keyId"]
+    ext["signing.password"] = rootProject.ext["signing.password"]
+    ext["signing.secretKeyRingFile"] = rootProject.ext["signing.secretKeyRingFile"]
+
+    signing {
+        sign publishing.publications
+    }
+
     repositories {
+//        maven {
+//            name = "GitHubPackages"
+//            url = uri("https://maven.pkg.github.com/ap-rahmanipratama/astrapayqrisproject") // Replace with your GitHub user ID and repository
+//            credentials {
+//                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+//                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+//            }
+//        }
         maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/ap-rahmanipratama/astrapayqrisproject") // Replace with your GitHub user ID and repository
+            name = "maven-central-snapshot"
+            url = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
             credentials {
-                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
-                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+
+                username = project.findProperty("mavenCentralUsername") ?: "aebqYdwb"
+                password = project.findProperty("mavenCentralPassword") ?: "63twoFT0CMH7/w/0/zPabPyqHQX6N3m8cjTHahGxhMjA"
             }
         }
+
     }
 }
 
